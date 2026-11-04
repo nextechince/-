@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#ffffff">
-<title>Luma Chat</title>
+<meta name="theme-color" content="#080510">
+<title>LUMA Chat</title>
 
 <style>
 * {
@@ -16,156 +15,233 @@
 
 body {
     min-height: 100vh;
-    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffffff;
-    color: #212121;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     overflow: hidden;
+    background:
+        radial-gradient(ellipse at 50% 40%, #241039 0%, #10091c 42%, #080510 78%);
+    font-family: Arial, sans-serif;
+    color: white;
 }
 
-.splash {
+.glow {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: #a855f7;
+    filter: blur(110px);
+    opacity: 0.24;
+    animation: glowPulse 3s ease-in-out infinite alternate;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    transform: translateY(-10px);
+    padding: 25px;
+}
+
+.logo-wrapper {
+    width: 125px;
+    height: 125px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 35px;
+    background: linear-gradient(145deg, #26133e, #10091c);
+    border: 1px solid rgba(216, 180, 254, 0.35);
+    box-shadow:
+        0 0 18px rgba(168, 85, 247, 0.55),
+        0 0 45px rgba(168, 85, 247, 0.3),
+        inset 0 0 25px rgba(168, 85, 247, 0.15);
+    animation: logoFloat 3s ease-in-out infinite;
 }
 
 .logo {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 28px;
-    opacity: 0;
-    transform: scale(.88);
-    animation: logoIn .9s ease forwards;
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 12px rgba(216, 180, 254, 0.65));
 }
 
-.name {
-    margin-top: 28px;
-    font-size: 29px;
-    font-weight: 600;
-    letter-spacing: -.5px;
-    opacity: 7;
-    animation: fadeIn .7s ease .2s forwards;
+.title {
+    margin-top: 30px;
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    background: linear-gradient(90deg, #ffffff, #d8b4fe, #a855f7);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.7));
+    animation: textPulse 2.5s ease-in-out infinite;
 }
 
 .tagline {
-    margin-top: 8px;
-    font-size: 14px;
-    color: #888888;
-    letter-spacing: .2px;
-    opacity: 0;
-    animation: fadeIn .7s ease .3s forwards;
+    margin-top: 12px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #c4b5d9;
 }
 
 .loader {
-    width: 24px;
-    height: 24px;
-    margin-top: 48px;
-    border: 2px solid rgba(88, 101, 242, .15);
-    border-top-color: #5865F2;
-    border-radius: 50%;
-    animation: spin .8s linear infinite, fadeIn .7s ease .4s forwards;
-    opacity: 0;
+    width: 165px;
+    height: 4px;
+    margin-top: 45px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.2);
+}
+
+.loader-bar {
+    width: 45%;
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #a855f7, #d8b4fe, #00d9ff);
+    box-shadow: 0 0 15px #a855f7;
+    animation: loading 1.5s ease-in-out infinite;
+}
+
+.loading-text {
+    margin-top: 18px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #b9a3d1;
 }
 
 .footer {
-    position: fixed;
-    bottom: 24px;
-    font-size: 11px;
-    color: #b0b0b0;
-    letter-spacing: .5px;
-    opacity: 0;
-    animation: fadeIn .7s ease .5s forwards;
+    position: absolute;
+    bottom: 28px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #746581;
 }
 
-@keyframes logoIn {
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+@keyframes loading {
+    0% { transform: translateX(-110%); }
+    100% { transform: translateX(350%); }
 }
 
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-9px); }
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+@keyframes glowPulse {
+    from { transform: scale(0.85); opacity: 0.16; }
+    to { transform: scale(1.2); opacity: 0.32; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-    }
+@keyframes textPulse {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.45)); }
+    50% { filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.85)); }
 }
 </style>
 </head>
 
 <body>
 
-<main class="splash">
-    <img src="/assets/images/logo.png" class="logo" alt="Luma Chat Logo">
-    <h1 class="name">Luma Chat</h1>
-    <p class="tagline">Fast. Simple. Secure.</p>
-    <div class="loader"></div>
+<div class="glow"></div>
+
+<main class="container">
+    <div class="logo-wrapper">
+        <img
+            src="/assets/images/logo.png"
+            class="logo"
+            alt="LUMA Chat"
+        >
+    </div>
+
+    <h1 class="title">LUMA CHAT</h1>
+
+    <p class="tagline">CONNECT · CHAT · BELONG</p>
+
+    <div class="loader">
+        <div class="loader-bar"></div>
+    </div>
+
+    <p class="loading-text">PREPARING YOUR EXPERIENCE</p>
 </main>
 
-<footer class="footer">From Luma</footer>
+<div class="footer">From LUMA</div>
 
 <script type="module">
 import { auth, firebaseReady } from "/config/firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
-const SESSION_KEY = "luma_session_uid";
-const startTime = Date.now();
+const startedAt = Date.now();
 const minimumDuration = 1800;
 
-let navigated = false;
+const savedSessionUid = localStorage.getItem("luma_session_uid");
 
-function navigate(path) {
-    if (navigated) return;
+let authUser = null;
+let authResolved = false;
+let navigating = false;
 
-    navigated = true;
+function navigateWhenReady() {
+    if (!authResolved || navigating) return;
 
-    const remaining = Math.max(
-        0,
-        minimumDuration - (Date.now() - startTime)
-    );
+    const elapsed = Date.now() - startedAt;
+    const remaining = Math.max(0, minimumDuration - elapsed);
 
-    setTimeout(() => {
-        window.location.replace(path);
-    }, remaining);
-}
+    if (remaining > 0) {
+        setTimeout(navigateWhenReady, remaining);
+        return;
+    }
 
-try {
-    await firebaseReady;
+    navigating = true;
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            localStorage.setItem(SESSION_KEY, user.uid);
-            navigate("/chats");
-        } else {
-            localStorage.removeItem(SESSION_KEY);
-            navigate("/phone-entry");
+    if (authUser) {
+        if (savedSessionUid !== authUser.uid) {
+            localStorage.setItem("luma_session_uid", authUser.uid);
         }
-    }, () => {
-        localStorage.removeItem(SESSION_KEY);
-        navigate("/phone-entry");
-    });
 
-} catch (error) {
-    navigate("/phone-entry");
+        location.replace("/chats");
+    } else {
+        localStorage.removeItem("luma_session_uid");
+        location.replace("/phone-entry");
+    }
 }
+
+async function startSplash() {
+    try {
+        await firebaseReady;
+
+        onAuthStateChanged(
+            auth,
+            user => {
+                authUser = user;
+                authResolved = true;
+                navigateWhenReady();
+            },
+            () => {
+                authUser = null;
+                authResolved = true;
+                navigateWhenReady();
+            }
+        );
+    } catch (error) {
+        const remaining = Math.max(
+            0,
+            minimumDuration - (Date.now() - startedAt)
+        );
+
+        setTimeout(() => {
+            localStorage.removeItem("luma_session_uid");
+            location.replace("/phone-entry");
+        }, remaining);
+    }
+}
+
+startSplash();
 </script>
 
 </body>
