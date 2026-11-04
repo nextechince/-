@@ -1,0 +1,494 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080510">
+<title>Email Entry | LUMA Chat</title>
+
+<style>
+:root {
+    --purple: #a855f7;
+    --lavender: #d8b4fe;
+    --cyan: #00d9ff;
+    --muted: #b9a9ca;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 22px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(ellipse at 50% 5%, #321052 0%, transparent 48%),
+        radial-gradient(ellipse at 100% 100%, #10134a 0%, transparent 45%),
+        #080510;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.glow {
+    position: fixed;
+    width: 270px;
+    height: 270px;
+    border-radius: 50%;
+    filter: blur(110px);
+    opacity: .22;
+    pointer-events: none;
+}
+
+.glow.one {
+    background: #a020ff;
+    top: -100px;
+    left: -100px;
+}
+
+.glow.two {
+    background: #174dff;
+    bottom: -100px;
+    right: -100px;
+}
+
+.shell {
+    width: 100%;
+    max-width: 430px;
+    position: relative;
+    z-index: 1;
+}
+
+.card {
+    padding: 32px 23px 27px;
+    border-radius: 34px;
+    background: linear-gradient(145deg, rgba(95,36,145,.23), rgba(13,8,30,.88), rgba(22,19,67,.58));
+    border: 1px solid rgba(205,151,255,.5);
+    box-shadow:
+        0 0 15px rgba(168,85,247,.5),
+        0 0 38px rgba(168,85,247,.22),
+        inset 0 0 30px rgba(168,85,247,.12);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+}
+
+.logo-area {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.logo-ring {
+    width: 105px;
+    height: 105px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, rgba(168,85,247,.25), rgba(10,5,30,.8));
+    border: 1px solid rgba(216,180,254,.65);
+    box-shadow:
+        0 0 15px rgba(168,85,247,.8),
+        0 0 35px rgba(168,85,247,.3),
+        inset 0 0 20px rgba(168,85,247,.2);
+    animation: float 4s ease-in-out infinite;
+}
+
+.logo {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 12px #d8b4fe);
+}
+
+.brand {
+    font-size: 29px;
+    font-weight: 900;
+    letter-spacing: 5px;
+    color: #e9d5ff;
+    text-shadow: 0 0 10px #a855f7, 0 0 22px #a855f7;
+}
+
+.brand-sub {
+    margin-top: 5px;
+    color: #d8b4fe;
+    font-size: 14px;
+    font-style: italic;
+    letter-spacing: 2px;
+}
+
+.heading {
+    text-align: center;
+    margin-bottom: 27px;
+}
+
+.email-icon {
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 17px;
+    display: grid;
+    place-items: center;
+    border-radius: 21px;
+    font-size: 29px;
+    background: rgba(168,85,247,.16);
+    border: 1px solid rgba(216,180,254,.55);
+    box-shadow: 0 0 22px rgba(168,85,247,.3);
+}
+
+.heading h1 {
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.heading p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.error {
+    display: none;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,80,120,.45);
+    background: rgba(255,50,100,.1);
+    color: #ff9bb8;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.success {
+    display: none;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(53,242,160,.4);
+    background: rgba(53,242,160,.09);
+    color: #9af5c8;
+    font-size: 13px;
+}
+
+.field-label {
+    display: block;
+    margin: 0 0 9px 4px;
+    font-size: 13px;
+    color: #e4d5f5;
+    font-weight: 600;
+}
+
+.email-box {
+    position: relative;
+    margin-bottom: 23px;
+}
+
+.email-icon-small {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    font-size: 19px;
+    color: #c084fc;
+    pointer-events: none;
+}
+
+.email-input {
+    width: 100%;
+    height: 59px;
+    padding: 0 15px 0 49px;
+    border-radius: 17px;
+    border: 1px solid rgba(139,92,246,.8);
+    background: linear-gradient(110deg, rgba(50,22,88,.65), rgba(13,18,55,.85));
+    color: white;
+    font-size: 15px;
+    outline: none;
+    box-shadow:
+        0 0 13px rgba(168,85,247,.25),
+        inset 0 0 15px rgba(168,85,247,.1);
+    transition: .25s;
+}
+
+.email-input::placeholder {
+    color: #9984b4;
+}
+
+.email-input:focus {
+    border-color: var(--cyan);
+    box-shadow:
+        0 0 15px rgba(168,85,247,.5),
+        0 0 22px rgba(0,217,255,.15);
+}
+
+.continue-button {
+    width: 100%;
+    min-height: 58px;
+    border: 1px solid rgba(255,255,255,.6);
+    border-radius: 50px;
+    color: white;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    background: linear-gradient(100deg, #a020ff, #7625ff 55%, #075bff);
+    box-shadow:
+        0 0 14px rgba(192,80,255,.8),
+        0 0 30px rgba(139,45,255,.45),
+        inset 0 1px 8px rgba(255,255,255,.3);
+    transition: .2s;
+}
+
+.continue-button:active {
+    transform: scale(.98);
+}
+
+.continue-button:disabled {
+    opacity: .55;
+    cursor: wait;
+}
+
+.back-link {
+    display: block;
+    margin: 20px auto 0;
+    border: 0;
+    background: transparent;
+    color: #d8b4fe;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.privacy {
+    text-align: center;
+    margin-top: 25px;
+    color: #c5b4d9;
+    font-size: 12px;
+    letter-spacing: .4px;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 23px;
+    color: #88759e;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+}
+
+@media(max-width:370px) {
+    .card {
+        padding: 27px 17px;
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    *,*::before,*::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="glow one"></div>
+<div class="glow two"></div>
+
+<main class="shell">
+    <section class="card">
+
+
+        <div class="heading">
+            
+            <h1>
+                Enter your email address.</h1> 
+              <p>  We'll send you
+                a secure six-digit verification code.
+            </p>
+        </div>
+
+        <div class="error" id="error" role="alert"></div>
+        <div class="success" id="success" role="status"></div>
+
+        <label class="field-label" for="email">Email address</label>
+
+        <div class="email-box">
+            <span class="email-icon-small"></span>
+            <input
+                class="email-input"
+                id="email"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                placeholder=""
+                maxlength="254"
+                required
+            >
+        </div>
+
+        <button class="continue-button" id="continue">
+            Send verification code →
+        </button>
+
+        <button class="back-link" id="back">
+            Wrong Phone Number?
+        </button>
+
+        <div class="privacy">
+            ♙ Secure · Private · Yours
+        </div>
+
+    </section>
+
+    <div class="footer">LUMA CHAT · CONNECT. CHAT. BELONG.</div>
+</main>
+
+<script type="module">
+import { db, firebaseReady } from "/config/firebase.js";
+
+import {
+    collection,
+    query,
+    where,
+    limit,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const API_BASE = "https://YOUR_BACKEND_DOMAIN";
+
+const $ = id => document.getElementById(id);
+
+function showError(message) {
+    $("error").textContent = message;
+    $("error").style.display = "block";
+    $("success").style.display = "none";
+}
+
+function showSuccess(message) {
+    $("success").textContent = message;
+    $("success").style.display = "block";
+    $("error").style.display = "none";
+}
+
+function clearMessages() {
+    $("error").style.display = "none";
+    $("success").style.display = "none";
+}
+
+async function api(path, body) {
+    const response = await fetch(API_BASE + path, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
+
+    const data = await response.json().catch(() => ({
+        error: "Invalid server response"
+    }));
+
+    if (!response.ok) {
+        throw new Error(data.error || data.message || "Request failed");
+    }
+
+    return data;
+}
+
+function validEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function setLoading(loading) {
+    $("continue").disabled = loading;
+    $("continue").textContent = loading
+        ? "Sending verification code..."
+        : "Send verification code →";
+}
+
+let sending = false;
+
+async function sendVerification() {
+    if (sending) return;
+
+    clearMessages();
+
+    const email = $("email").value.trim().toLowerCase();
+
+    if (!validEmail(email)) {
+        showError("Please enter a valid email address.");
+        $("email").focus();
+        return;
+    }
+
+    const phone = sessionStorage.getItem("pending_phone");
+
+    if (!phone) {
+        showError("Your phone number session has expired. Please enter your phone number again.");
+        return;
+    }
+
+    sending = true;
+    setLoading(true);
+
+    try {
+        await firebaseReady;
+
+        const existingQuery = query(
+            collection(db, "users"),
+            where("email", "==", email),
+            limit(1)
+        );
+
+        const existing = await getDocs(existingQuery);
+
+        if (!existing.empty) {
+            throw new Error("This email is already registered. Please sign in instead.");
+        }
+
+        const userId = crypto.randomUUID();
+
+        await api("/api/auth/send-email-verification", {
+            email,
+            userId
+        });
+
+        sessionStorage.setItem("pending_email", email);
+        sessionStorage.setItem("pending_user_id", userId);
+        sessionStorage.removeItem("email_otp_verified");
+
+        location.assign("/email-verification");
+
+    } catch (error) {
+        showError(error.message || "We couldn't send your verification code. Please try again.");
+    } finally {
+        sending = false;
+        setLoading(false);
+    }
+}
+
+$("continue").addEventListener("click", sendVerification);
+
+$("email").addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+        sendVerification();
+    }
+});
+
+$("email").addEventListener("input", clearMessages);
+
+$("back").addEventListener("click", () => {
+    location.assign("/phone-entry");
+});
+</script>
+
+</body>
+</html>
