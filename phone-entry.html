@@ -1,0 +1,747 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<title>Your Phone Number | LUMA Chat</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #5865F2;
+    --background: #ffffff;
+    --surface: #f1f1f1;
+    --text: #212121;
+    --muted: #888888;
+    --danger: #e53935;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: var(--background);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.container {
+    width: 100%;
+    max-width: 520px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 40px 24px 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+h1 {
+    margin-top: 32px;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -.8px;
+}
+
+.description {
+    margin-top: 9px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.phone-section {
+    display: flex;
+    gap: 12px;
+    margin-top: 40px;
+    align-items: stretch;
+}
+
+.country-button {
+    min-width: 112px;
+    height: 56px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: none;
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.country-button:active {
+    transform: scale(.97);
+}
+
+.country-flag {
+    font-size: 21px;
+}
+
+.arrow {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.phone-input {
+    min-width: 0;
+    flex: 1;
+    height: 56px;
+    padding: 0 16px;
+    background: var(--surface);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    outline: none;
+    color: var(--text);
+    font-size: 18px;
+    letter-spacing: 1.2px;
+    transition: border-color .2s;
+}
+
+.phone-input:focus {
+    border-color: var(--primary);
+}
+
+.phone-input::placeholder {
+    color: #a0a0a0;
+    letter-spacing: 1px;
+}
+
+.error-box {
+    display: none;
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(229, 57, 53, .08);
+    border: 1px solid rgba(229, 57, 53, .25);
+    color: var(--danger);
+    font-size: 13px;
+    line-height: 1.5;
+    align-items: center;
+    gap: 9px;
+}
+
+.error-box.show {
+    display: flex;
+}
+
+.error-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.bottom-section {
+    margin-top: auto;
+    padding-top: 35px;
+}
+
+.continue-button {
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 12px;
+    background: var(--primary);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .2s, transform .2s;
+}
+
+.continue-button:active {
+    transform: scale(.98);
+}
+
+.continue-button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.button-loader {
+    display: none;
+    width: 21px;
+    height: 21px;
+    border: 2px solid rgba(255,255,255,.35);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    margin: auto;
+}
+
+.continue-button.loading .button-text {
+    display: none;
+}
+
+.continue-button.loading .button-loader {
+    display: block;
+}
+
+.terms {
+    margin-top: 16px;
+    text-align: center;
+    color: #999999;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.terms a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.country-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0,0,0,.45);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.country-overlay.show {
+    display: flex;
+}
+
+.country-dialog {
+    width: 100%;
+    max-width: 520px;
+    height: min(80vh, 680px);
+    background: white;
+    border-radius: 22px 22px 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUp .25s ease;
+}
+
+.dialog-header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.dialog-header h2 {
+    font-size: 18px;
+}
+
+.close-button {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: #f1f1f1;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+.country-search {
+    margin: 14px 16px;
+    height: 46px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding: 0 14px;
+    background: #f1f1f1;
+    font-size: 15px;
+    color: #222;
+}
+
+.country-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 12px 20px;
+}
+
+.country-item {
+    width: 100%;
+    min-height: 54px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    color: #222;
+}
+
+.country-item:active,
+.country-item:hover {
+    background: #f2f3ff;
+}
+
+.country-item.selected {
+    background: #eeeeff;
+}
+
+.country-item .flag {
+    font-size: 23px;
+}
+
+.country-name {
+    flex: 1;
+    font-size: 14px;
+}
+
+.country-code {
+    font-size: 14px;
+    color: #777;
+}
+
+.empty-countries {
+    padding: 30px;
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@media (min-width: 600px) {
+    body {
+        background: #f7f7f7;
+    }
+
+    .container {
+        background: white;
+        padding-top: 65px;
+        padding-bottom: 35px;
+    }
+
+    .country-dialog {
+        border-radius: 22px;
+        margin-bottom: 30px;
+    }
+
+    .country-overlay {
+        align-items: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <img src="/assets/images/logo.png" class="logo" alt="LUMA Chat">
+
+    <h1>Your phone number</h1>
+
+    <p class="description">
+        Pick your country, then enter your number.
+    </p>
+
+    <section class="phone-section">
+
+        <button class="country-button" id="countryButton" type="button">
+            <span class="country-flag" id="countryFlag">🇺🇸</span>
+            <span id="countryCode">+1</span>
+            <span class="arrow">▼</span>
+        </button>
+
+        <input
+            type="tel"
+            id="phoneInput"
+            class="phone-input"
+            placeholder=""
+            inputmode="numeric"
+            autocomplete="tel-national"
+            maxlength="15"
+            autofocus
+        >
+
+    </section>
+
+    <div class="error-box" id="errorBox">
+        <span class="error-icon">⚠</span>
+        <span id="errorText"></span>
+    </div>
+
+    <div class="bottom-section">
+
+        <button class="continue-button" id="continueButton" type="button">
+            <span class="button-text">Continue</span>
+            <span class="button-loader"></span>
+        </button>
+
+        <p class="terms">
+            By continuing you agree to our
+            <a href="/terms">Terms</a> and
+            <a href="/privacy">Privacy Policy</a>
+        </p>
+
+    </div>
+
+</main>
+
+<div class="country-overlay" id="countryOverlay">
+
+    <section class="country-dialog">
+
+        <header class="dialog-header">
+            <h2>Select your country</h2>
+            <button class="close-button" id="closeCountry" type="button">×</button>
+        </header>
+
+        <input
+            type="search"
+            id="countrySearch"
+            class="country-search"
+            placeholder="Search country..."
+            autocomplete="off"
+        >
+
+        <div class="country-list" id="countryList"></div>
+
+    </section>
+
+</div>
+
+<script type="module">
+import { db, firebaseReady } from "/config/firebase.js";
+import {
+    collection,
+    query,
+    where,
+    limit,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+    getCountries,
+    getCountryCallingCode
+} from "https://cdn.jsdelivr.net/npm/libphonenumber-js@1.11.20/+esm";
+
+const phoneInput = document.getElementById("phoneInput");
+const continueButton = document.getElementById("continueButton");
+const countryButton = document.getElementById("countryButton");
+const countryOverlay = document.getElementById("countryOverlay");
+const closeCountry = document.getElementById("closeCountry");
+const countrySearch = document.getElementById("countrySearch");
+const countryList = document.getElementById("countryList");
+const countryFlag = document.getElementById("countryFlag");
+const countryCode = document.getElementById("countryCode");
+const errorBox = document.getElementById("errorBox");
+const errorText = document.getElementById("errorText");
+
+const SESSION_KEYS = {
+    pendingPhone: "pending_phone",
+    signinEmail: "signin_email",
+    signinUid: "signin_uid"
+};
+
+const favoriteCountries = ["US", "GB", "NG", "IN", "KE", "GH"];
+
+const displayNames = new Intl.DisplayNames(["en"], {
+    type: "region"
+});
+
+let selectedCountry = {
+    iso: "US",
+    name: "United States",
+    code: "+1",
+    flag: "🇺🇸"
+};
+
+let countries = [];
+let isLoading = false;
+
+function getFlag(iso) {
+    return String.fromCodePoint(
+        ...iso.split("").map(char => 127397 + char.charCodeAt(0))
+    );
+}
+
+function showError(message) {
+    errorText.textContent = message;
+    errorBox.classList.add("show");
+}
+
+function hideError() {
+    errorBox.classList.remove("show");
+    errorText.textContent = "";
+}
+
+function setLoading(value) {
+    isLoading = value;
+    continueButton.disabled = value;
+    continueButton.classList.toggle("loading", value);
+}
+
+function openCountryPicker() {
+    countryOverlay.classList.add("show");
+    countrySearch.value = "";
+    renderCountries("");
+    setTimeout(() => countrySearch.focus(), 100);
+}
+
+function closeCountryPicker() {
+    countryOverlay.classList.remove("show");
+}
+
+function selectCountry(country) {
+    selectedCountry = country;
+    countryFlag.textContent = country.flag;
+    countryCode.textContent = country.code;
+    closeCountryPicker();
+    hideError();
+    phoneInput.focus();
+}
+
+function renderCountries(search) {
+    const term = search.trim().toLowerCase();
+
+    const filtered = countries.filter(country =>
+        country.name.toLowerCase().includes(term) ||
+        country.code.includes(term) ||
+        country.iso.toLowerCase().includes(term)
+    );
+
+    countryList.replaceChildren();
+
+    if (!filtered.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-countries";
+        empty.textContent = "No countries found";
+        countryList.appendChild(empty);
+        return;
+    }
+
+    const favorites = filtered.filter(country =>
+        favoriteCountries.includes(country.iso)
+    );
+
+    const others = filtered.filter(country =>
+        !favoriteCountries.includes(country.iso)
+    );
+
+    const ordered = term ? filtered : [...favorites, ...others];
+
+    ordered.forEach(country => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "country-item";
+
+        if (country.iso === selectedCountry.iso) {
+            button.classList.add("selected");
+        }
+
+        const flag = document.createElement("span");
+        flag.className = "flag";
+        flag.textContent = country.flag;
+
+        const name = document.createElement("span");
+        name.className = "country-name";
+        name.textContent = country.name;
+
+        const code = document.createElement("span");
+        code.className = "country-code";
+        code.textContent = country.code;
+
+        button.append(flag, name, code);
+
+        button.addEventListener("click", () => {
+            selectCountry(country);
+        });
+
+        countryList.appendChild(button);
+    });
+}
+
+function initializeCountries() {
+    countries = getCountries()
+        .map(iso => {
+            try {
+                return {
+                    iso,
+                    name: displayNames.of(iso) || iso,
+                    code: "+" + getCountryCallingCode(iso),
+                    flag: getFlag(iso)
+                };
+            } catch {
+                return null;
+            }
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+    selectedCountry = countries.find(country => country.iso === "US") || selectedCountry;
+
+    countryFlag.textContent = selectedCountry.flag;
+    countryCode.textContent = selectedCountry.code;
+
+    renderCountries("");
+}
+
+function normalizePhone(value) {
+    return value.replace(/\D/g, "").slice(0, 15);
+}
+
+function withTimeout(promise, milliseconds) {
+    return Promise.race([
+        promise,
+        new Promise((_, reject) => {
+            setTimeout(() => reject(new Error("NETWORK_TIMEOUT")), milliseconds);
+        })
+    ]);
+}
+
+async function continueRegistration() {
+    if (isLoading) return;
+
+    hideError();
+
+    const digits = normalizePhone(phoneInput.value);
+
+    if (digits.length < 6) {
+        showError("Enter a valid phone number");
+        phoneInput.focus();
+        return;
+    }
+
+    const fullPhone = selectedCountry.code + digits;
+
+    setLoading(true);
+
+    try {
+        await firebaseReady;
+
+        const usersRef = collection(db, "users");
+
+        const userQuery = query(
+            usersRef,
+            where("phone", "==", fullPhone),
+            limit(1)
+        );
+
+        const snapshot = await withTimeout(
+            getDocs(userQuery),
+            8000
+        );
+
+        localStorage.setItem(SESSION_KEYS.pendingPhone, fullPhone);
+
+        if (!snapshot.empty) {
+            const userDoc = snapshot.docs[0];
+            const userData = userDoc.data();
+
+            const email = userData.email;
+            const uid = userDoc.id;
+
+            if (!email || !String(email).trim()) {
+                showError("Account setup incomplete. Please sign up again.");
+                setLoading(false);
+                return;
+            }
+
+            localStorage.setItem(SESSION_KEYS.signinEmail, email);
+            localStorage.setItem(SESSION_KEYS.signinUid, uid);
+
+            window.location.replace("/signin-passcode");
+            return;
+        }
+
+        localStorage.removeItem(SESSION_KEYS.signinEmail);
+        localStorage.removeItem(SESSION_KEYS.signinUid);
+
+        window.location.replace("/email-entry");
+
+    } catch (error) {
+        console.error("Phone lookup failed:", error);
+
+        showError(
+            error.message === "NETWORK_TIMEOUT"
+                ? "Network error. Check your connection and try again."
+                : "Network error. Check your connection and try again."
+        );
+
+        setLoading(false);
+    }
+}
+
+phoneInput.addEventListener("input", () => {
+    const normalized = normalizePhone(phoneInput.value);
+
+    if (phoneInput.value !== normalized) {
+        phoneInput.value = normalized;
+    }
+
+    hideError();
+});
+
+phoneInput.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+        continueRegistration();
+    }
+});
+
+continueButton.addEventListener("click", continueRegistration);
+
+countryButton.addEventListener("click", openCountryPicker);
+
+closeCountry.addEventListener("click", closeCountryPicker);
+
+countryOverlay.addEventListener("click", event => {
+    if (event.target === countryOverlay) {
+        closeCountryPicker();
+    }
+});
+
+countrySearch.addEventListener("input", event => {
+    renderCountries(event.target.value);
+});
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        closeCountryPicker();
+    }
+});
+
+initializeCountries();
+</script>
+
+</body>
+</html>
