@@ -1,0 +1,604 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080510">
+<title>Verify Email | LUMA Chat</title>
+
+<style>
+:root {
+    --purple: #a855f7;
+    --lavender: #d8b4fe;
+    --cyan: #00d9ff;
+    --text: #fff;
+    --muted: #b9a9ca;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 22px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(ellipse at 50% 5%, #321052 0%, transparent 48%),
+        radial-gradient(ellipse at 100% 100%, #10134a 0%, transparent 45%),
+        #080510;
+    color: var(--text);
+    font-family: Arial, sans-serif;
+}
+
+.glow {
+    position: fixed;
+    width: 270px;
+    height: 270px;
+    border-radius: 50%;
+    filter: blur(110px);
+    opacity: .22;
+    pointer-events: none;
+}
+
+.glow.one {
+    background: #a020ff;
+    top: -100px;
+    left: -100px;
+}
+
+.glow.two {
+    background: #174dff;
+    bottom: -100px;
+    right: -100px;
+}
+
+.shell {
+    width: 100%;
+    max-width: 430px;
+    position: relative;
+    z-index: 1;
+}
+
+.card {
+    padding: 32px 23px 27px;
+    border-radius: 34px;
+    background: linear-gradient(145deg, rgba(95,36,145,.23), rgba(13,8,30,.88), rgba(22,19,67,.58));
+    border: 1px solid rgba(205,151,255,.5);
+    box-shadow:
+        0 0 15px rgba(168,85,247,.5),
+        0 0 38px rgba(168,85,247,.22),
+        inset 0 0 30px rgba(168,85,247,.12);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+}
+
+.logo-area {
+    text-align: center;
+    margin-bottom: 26px;
+}
+
+.logo-ring {
+    width: 105px;
+    height: 105px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, rgba(168,85,247,.25), rgba(10,5,30,.8));
+    border: 1px solid rgba(216,180,254,.65);
+    box-shadow:
+        0 0 15px rgba(168,85,247,.8),
+        0 0 35px rgba(168,85,247,.3),
+        inset 0 0 20px rgba(168,85,247,.2);
+    animation: float 4s ease-in-out infinite;
+}
+
+.logo {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 12px #d8b4fe);
+}
+
+.brand {
+    font-size: 29px;
+    font-weight: 900;
+    letter-spacing: 5px;
+    color: #e9d5ff;
+    text-shadow: 0 0 10px #a855f7, 0 0 22px #a855f7;
+}
+
+.brand-sub {
+    margin-top: 5px;
+    color: #d8b4fe;
+    font-size: 14px;
+    font-style: italic;
+    letter-spacing: 2px;
+}
+
+.heading {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.mail-icon {
+    width: 62px;
+    height: 62px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 17px;
+    border-radius: 20px;
+    font-size: 29px;
+    background: rgba(168,85,247,.16);
+    border: 1px solid rgba(216,180,254,.55);
+    box-shadow: 0 0 22px rgba(168,85,247,.3);
+}
+
+.heading h1 {
+    font-size: 25px;
+    margin-bottom: 11px;
+}
+
+.heading p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.email-label {
+    display: inline-block;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    color: #e9d5ff;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(168,85,247,.6);
+}
+
+.error, .success {
+    display: none;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.error {
+    color: #ff9bb8;
+    border: 1px solid rgba(255,80,120,.45);
+    background: rgba(255,50,100,.1);
+}
+
+.success {
+    color: #9af5c8;
+    border: 1px solid rgba(53,242,160,.4);
+    background: rgba(53,242,160,.09);
+}
+
+.otp-label {
+    color: #e4d5f5;
+    font-size: 13px;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.otp {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.otp input {
+    width: 100%;
+    min-width: 0;
+    height: 57px;
+    border-radius: 14px;
+    border: 1px solid rgba(168,85,247,.75);
+    background: linear-gradient(145deg, rgba(65,27,100,.65), rgba(13,13,43,.9));
+    color: white;
+    text-align: center;
+    font-size: 23px;
+    font-weight: 800;
+    outline: none;
+    box-shadow: inset 0 0 12px rgba(168,85,247,.1);
+    transition: .2s;
+    caret-color: var(--cyan);
+}
+
+.otp input:focus {
+    border-color: var(--cyan);
+    box-shadow:
+        0 0 13px rgba(168,85,247,.55),
+        0 0 19px rgba(0,217,255,.18);
+    transform: translateY(-2px);
+}
+
+.verify-button {
+    width: 100%;
+    min-height: 57px;
+    border: 1px solid rgba(255,255,255,.6);
+    border-radius: 50px;
+    color: white;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    background: linear-gradient(100deg, #a020ff, #7625ff 55%, #075bff);
+    box-shadow:
+        0 0 14px rgba(192,80,255,.8),
+        0 0 30px rgba(139,45,255,.45),
+        inset 0 1px 8px rgba(255,255,255,.3);
+    transition: .2s;
+}
+
+.verify-button:active {
+    transform: scale(.98);
+}
+
+.verify-button:disabled {
+    opacity: .55;
+    cursor: wait;
+}
+
+.resend-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+    margin-top: 21px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.resend-button, .change-email {
+    border: 0;
+    background: transparent;
+    color: #d8b4fe;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.resend-button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.timer {
+    color: #a78bfa;
+    font-size: 12px;
+}
+
+.change-email {
+    display: block;
+    margin: 20px auto 0;
+}
+
+.privacy {
+    text-align: center;
+    margin-top: 25px;
+    color: #c5b4d9;
+    font-size: 12px;
+    letter-spacing: .4px;
+}
+
+.privacy span {
+    color: #d8b4fe;
+    margin-right: 6px;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 23px;
+    color: #88759e;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+}
+
+@media(max-width:370px) {
+    .card {
+        padding: 27px 16px;
+    }
+
+    .otp {
+        gap: 5px;
+    }
+
+    .otp input {
+        height: 51px;
+        font-size: 20px;
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    *,*::before,*::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="glow one"></div>
+<div class="glow two"></div>
+
+<main class="shell">
+    <section class="card">
+
+        <div class="logo-area">
+            <div class="logo-ring">
+                <img src="/assets/images/logo.png" class="logo" alt="LUMA Chat">
+            </div>
+            <div class="brand">LUMA</div>
+            <div class="brand-sub">Chat</div>
+        </div>
+
+        <div class="heading">
+            <div class="mail-icon">✉</div>
+            <h1>Check your inbox</h1>
+            <p>
+                We've sent a six-digit verification code to
+                <br>
+                <span class="email-label" id="emailLabel"></span>
+            </p>
+        </div>
+
+        <div class="error" id="error" role="alert"></div>
+        <div class="success" id="success" role="status"></div>
+
+        <label class="otp-label">Enter your verification code</label>
+
+        <div class="otp" id="otp">
+            <input aria-label="Digit 1" maxlength="1" inputmode="numeric" autocomplete="one-time-code">
+            <input aria-label="Digit 2" maxlength="1" inputmode="numeric">
+            <input aria-label="Digit 3" maxlength="1" inputmode="numeric">
+            <input aria-label="Digit 4" maxlength="1" inputmode="numeric">
+            <input aria-label="Digit 5" maxlength="1" inputmode="numeric">
+            <input aria-label="Digit 6" maxlength="1" inputmode="numeric">
+        </div>
+
+        <button class="verify-button" id="verify">
+            Verify email →
+        </button>
+
+        <div class="resend-area">
+            <span>Didn't receive the code?</span>
+            <button class="resend-button" id="resend" disabled>Resend code</button>
+            <span class="timer" id="timer"></span>
+        </div>
+
+        <button class="change-email" id="changeEmail">
+            ← Use a different email
+        </button>
+
+        <div class="privacy">
+            <span>♙</span> Secure · Private · Yours
+        </div>
+
+    </section>
+
+    <div class="footer">LUMA CHAT · CONNECT. CHAT. BELONG.</div>
+</main>
+
+<script type="module">
+const API_BASE = "https://YOUR_BACKEND_DOMAIN";
+
+const $ = id => document.getElementById(id);
+
+const email = sessionStorage.getItem("pending_email");
+const userId = sessionStorage.getItem("pending_user_id");
+
+const boxes = [...document.querySelectorAll("#otp input")];
+
+let timerId = null;
+let seconds = 0;
+let requestInProgress = false;
+
+function showError(message) {
+    $("error").textContent = message;
+    $("error").style.display = "block";
+    $("success").style.display = "none";
+}
+
+function showSuccess(message) {
+    $("success").textContent = message;
+    $("success").style.display = "block";
+    $("error").style.display = "none";
+}
+
+function clearMessages() {
+    $("error").style.display = "none";
+    $("success").style.display = "none";
+}
+
+async function api(path, body) {
+    const response = await fetch(API_BASE + path, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
+
+    const data = await response.json().catch(() => ({
+        error: "Invalid server response"
+    }));
+
+    if (!response.ok) {
+        throw new Error(data.error || data.message || "Request failed");
+    }
+
+    return data;
+}
+
+function setVerifyLoading(loading) {
+    $("verify").disabled = loading;
+    $("verify").textContent = loading
+        ? "Verifying..."
+        : "Verify email →";
+}
+
+function startTimer() {
+    clearTimeout(timerId);
+    seconds = 60;
+    $("resend").disabled = true;
+
+    function tick() {
+        $("timer").textContent = seconds > 0
+            ? `(${seconds}s)`
+            : "";
+
+        if (seconds > 0) {
+            seconds--;
+            timerId = setTimeout(tick, 1000);
+        } else {
+            $("resend").disabled = false;
+        }
+    }
+
+    tick();
+}
+
+function getCode() {
+    return boxes.map(box => box.value).join("");
+}
+
+boxes.forEach((box, index) => {
+    box.addEventListener("input", () => {
+        box.value = box.value.replace(/\D/g, "").slice(0, 1);
+
+        if (box.value && index < boxes.length - 1) {
+            boxes[index + 1].focus();
+        }
+
+        clearMessages();
+    });
+
+    box.addEventListener("keydown", event => {
+        if (event.key === "Backspace" && !box.value && index > 0) {
+            boxes[index - 1].focus();
+        }
+
+        if (event.key === "ArrowLeft" && index > 0) {
+            boxes[index - 1].focus();
+        }
+
+        if (event.key === "ArrowRight" && index < boxes.length - 1) {
+            boxes[index + 1].focus();
+        }
+    });
+
+    box.addEventListener("paste", event => {
+        const pasted = event.clipboardData
+            .getData("text")
+            .replace(/\D/g, "")
+            .slice(0, 6);
+
+        if (!pasted) return;
+
+        event.preventDefault();
+
+        pasted.split("").forEach((digit, position) => {
+            boxes[position].value = digit;
+        });
+
+        boxes[Math.min(pasted.length, 5)].focus();
+        clearMessages();
+    });
+});
+
+async function verifyEmail() {
+    if (requestInProgress) return;
+
+    clearMessages();
+
+    const code = getCode();
+
+    if (!/^\d{6}$/.test(code)) {
+        showError("Please enter all six digits of your verification code.");
+        boxes.find(box => !box.value)?.focus();
+        return;
+    }
+
+    requestInProgress = true;
+    setVerifyLoading(true);
+
+    try {
+        await api("/api/auth/verify-email", {
+            userId,
+            code
+        });
+
+        sessionStorage.setItem("email_otp_verified", "1");
+
+        location.replace("/passcode-setup");
+    } catch (error) {
+        showError(error.message || "Verification failed. Please try again.");
+
+        boxes.forEach(box => box.value = "");
+        boxes[0].focus();
+    } finally {
+        requestInProgress = false;
+        setVerifyLoading(false);
+    }
+}
+
+async function resendCode() {
+    if (requestInProgress || $("resend").disabled) return;
+
+    clearMessages();
+    requestInProgress = true;
+    $("resend").disabled = true;
+
+    try {
+        await api("/api/auth/send-email-verification", {
+            email,
+            userId
+        });
+
+        showSuccess("A new verification code has been sent to your email.");
+        startTimer();
+    } catch (error) {
+        showError(error.message || "Could not resend the verification code.");
+        $("resend").disabled = false;
+    } finally {
+        requestInProgress = false;
+    }
+}
+
+$("verify").addEventListener("click", verifyEmail);
+$("resend").addEventListener("click", resendCode);
+
+$("changeEmail").addEventListener("click", () => {
+    location.assign("/email-entry");
+});
+
+boxes[5].addEventListener("keydown", event => {
+    if (event.key === "Enter") verifyEmail();
+});
+
+if (!email || !userId) {
+    location.replace("/email-entry");
+} else {
+    $("emailLabel").textContent = email;
+    startTimer();
+}
+</script>
+
+</body>
+</html>
